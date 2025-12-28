@@ -86,10 +86,10 @@
             margin-bottom: 1rem;
         }
     </style>
-    <div th:replace="fragments/header :: header-styles"></div>
+    <div th:replace="~{fragments/header :: header-styles}"></div>
 </head>
 <body>
-    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="~{fragments/header :: header}"></div>
     <h1>📖 <span th:text="#{form.add.title}">Додати нову книгу</span></h1>
 
     <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}">Error</div>

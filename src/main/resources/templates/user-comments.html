@@ -72,10 +72,10 @@
             margin: 1rem 0;
         }
     </style>
-    <div th:replace="fragments/header :: header-styles"></div>
+    <div th:replace="~{fragments/header :: header-styles}"></div>
 </head>
 <body>
-    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="~{fragments/header :: header}"></div>
     <a th:href="@{/books}" class="back-link">← <span th:text="#{user.comments.back.to.catalog}">Повернутись до каталогу</span></a>
     <h1><span th:text="#{user.comments.title}">Коментарі користувача</span>: <span th:text="${email}">Email</span></h1>
 

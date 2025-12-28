@@ -17,6 +17,8 @@ import sumdu.edu.ua.core.port.CommentRepositoryPort;
 import sumdu.edu.ua.core.service.BookService;
 import sumdu.edu.ua.core.service.CommentService;
 
+import java.time.Instant;
+
 @Controller
 @RequestMapping("/books/{bookId}")
 public class CommentsController {
@@ -32,9 +34,6 @@ public class CommentsController {
     @Autowired
     private CommentService commentService;
 
-    /**
-     * Handles GET /books/{bookId} request and returns Thymeleaf view.
-     */
     @GetMapping
     public String showBookWithComments(
             @PathVariable long bookId,
@@ -71,46 +70,28 @@ public class CommentsController {
         return "book-comments";
     }
 
-    /**
-     * Handles POST /books/{bookId} request for adding comments via web form.
-     * Uses the authenticated user as the comment author.
-     */
     @PostMapping
     public String addComment(
             @PathVariable long bookId,
             @RequestParam String text,
             @AuthenticationPrincipal UserDetails userDetails) {
 
-        try {
-            String email = userDetails.getUsername(); // Spring Security returns email as username
-            commentService.addComment(bookId, email, text);
-            log.info("Comment added by user '{}' to book {}", email, bookId);
-        } catch (IllegalArgumentException e) {
-            log.warn("Bad request: {}", e.getMessage());
-        } catch (Exception e) {
-            log.error("Cannot save comment", e);
-        }
+        String email = userDetails.getUsername();
+        commentService.addComment(bookId, email, text);
+        log.info("Comment added by user '{}' to book {}", email, bookId);
 
         return "redirect:/books/" + bookId;
     }
 
-    /**
-     * Handles POST /books/{bookId} with _method=delete for deleting comments via web form.
-     * Only ADMIN can delete comments.
-     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(params = "_method=delete")
     public String deleteComment(
             @PathVariable long bookId,
-            @RequestParam long commentId) {
+            @RequestParam long commentId,
+            @RequestParam Instant createdAt) {
 
-        try {
-            commentService.delete(bookId, commentId);
-        } catch (IllegalStateException e) {
-            log.warn("Cannot delete comment due to business rule: {}", e.getMessage());
-        } catch (Exception e) {
-            log.error("Cannot delete comment", e);
-        }
+        commentService.delete(bookId, commentId, createdAt);
+        log.info("Comment {} deleted from book {}", commentId, bookId);
 
         return "redirect:/books/" + bookId;
     }

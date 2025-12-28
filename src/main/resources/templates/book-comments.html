@@ -170,10 +170,10 @@
             font-weight: bold;
         }
     </style>
-    <div th:replace="fragments/header :: header-styles"></div>
+    <div th:replace="~{fragments/header :: header-styles}"></div>
 </head>
 <body>
-    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="~{fragments/header :: header}"></div>
     <div class="book-info">
         <div class="book-title">📖 <span th:text="${book.title}">Book Title</span></div>
         <p class="book-meta">
@@ -207,6 +207,7 @@
                 </div>
                 <form sec:authorize="hasRole('ADMIN')" method="post" th:action="@{/books/{id}(id=${book.id})}" style="display:inline; padding:0; margin:0; background:none; box-shadow:none;">
                     <input type="hidden" name="commentId" th:value="${comment.id}">
+                    <input type="hidden" name="createdAt" th:value="${comment.createdAt}">
                     <input type="hidden" name="_method" value="delete">
                     <button type="submit" class="delete-btn" th:text="#{comments.delete}">Видалити</button>
                 </form>

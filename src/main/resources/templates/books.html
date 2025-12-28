@@ -136,10 +136,10 @@
             color: white;
         }
     </style>
-    <div th:replace="fragments/header :: header-styles"></div>
+    <div th:replace="~{fragments/header :: header-styles}"></div>
 </head>
 <body>
-    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="~{fragments/header :: header}"></div>
     <h1>📚 <span th:text="#{books.title}">Каталог книг</span></h1>
 
     <div class="toolbar">
